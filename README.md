@@ -4,10 +4,12 @@
 
 ### [Paper](static/pdf/vgm-vs.pdf) | [arXiv](https://arxiv.org/abs/2609.28312)
 
-Yimin Pan<sup>1</sup>, Sen Wang<sup>1,2</sup>, You Zhou<sup>1</sup>, Jianfeng Gao<sup>1</sup>,  
+Yimin Pan<sup>1</sup>, Sen Wang<sup>1,2,*</sup>, You Zhou<sup>1</sup>, Jianfeng Gao<sup>1</sup>,  
 Pengbo Sun<sup>1</sup>, Ahmed M. Naguib<sup>1</sup>, Zoltan-Csaba Marton<sup>1</sup>
 
 <sup>1</sup>Agile Robots SE, <sup>2</sup>Technical University of Munich
+
+<sup>*</sup>Corresponding author
 
 </div>
 
