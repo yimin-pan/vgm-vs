@@ -1,0 +1,258 @@
+body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+
+.footer .icon-link {
+    font-size: 25px;
+    color: #000;
+}
+
+.link-block a {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.dnerf {
+  font-variant: small-caps;
+}
+
+
+.teaser .hero-body {
+  padding-top: 0;
+  padding-bottom: 3rem;
+}
+
+.teaser {
+  font-family: 'Google Sans', sans-serif;
+}
+
+
+.publication-title {
+}
+
+.publication-banner {
+  max-height: parent;
+
+}
+
+.publication-banner video {
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  object-fit: fit;
+}
+
+.publication-header .hero-body {
+}
+
+.publication-title {
+    font-family: 'Google Sans', sans-serif;
+}
+
+.publication-authors {
+    font-family: 'Google Sans', sans-serif;
+}
+
+.publication-venue {
+    color: #555;
+    width: fit-content;
+    font-weight: bold;
+}
+
+.publication-awards {
+    color: #ff3860;
+    width: fit-content;
+    font-weight: bolder;
+}
+
+.publication-authors {
+}
+
+.publication-authors a {
+   color: hsl(204, 86%, 53%) !important;
+}
+
+.publication-authors a:hover {
+    text-decoration: underline;
+}
+
+.author-block {
+  display: inline-block;
+}
+
+.publication-banner img {
+}
+
+.publication-authors {
+  /*color: #4286f4;*/
+}
+
+.publication-video {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+
+    overflow: hidden;
+    border-radius: 10px !important;
+}
+
+.publication-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.publication-body img {
+}
+
+.results-carousel {
+  overflow: hidden;
+}
+
+.results-carousel .item {
+  margin: 5px;
+  overflow: hidden;
+  padding: 20px;
+  font-size: 0;
+}
+
+.results-carousel video {
+  margin: 0;
+}
+
+/* Demonstrations: one carousel per task, one slide at a time. Every slide has the same
+   fixed height and the frame is an inline block inside a centred item, so videos of any
+   aspect ratio (9:16 external, 4:3 wrist camera) sit centred without layout shifts. */
+.demo-task {
+  margin-top: 2.5rem;
+}
+
+.demo-task .title {
+  margin-bottom: 1rem;
+}
+
+.demo-carousel .item {
+  /* Bottom padding reserves room for the absolutely positioned pagination dots. */
+  padding: 0 0.75rem 2.25rem;
+  text-align: center;
+}
+
+/* Arrows sit in the gutters beside the slides rather than over the videos. */
+.demo-carousel {
+  padding: 0 3rem;
+}
+
+/* bulma-carousel only clips hero carousels; hide the slides beyond the visible pair. */
+.demo-carousel .slider {
+  overflow: hidden;
+}
+
+.demo-caption {
+  margin-top: 0.75rem;
+  font-size: 1.1rem;
+  color: #363636;
+}
+
+.video-frame {
+  position: relative;
+  display: inline-block;
+  /* All clips are 9:16. Fill the slide, but never grow taller than 90vh / 832px. */
+  width: min(100%, calc(min(90vh, 832px) * 9 / 16));
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+  line-height: 0;
+  cursor: pointer;
+  vertical-align: top;
+}
+
+.video-frame video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+}
+
+@media screen and (max-width: 768px) {
+  .demo-carousel {
+    padding: 0 2rem;
+  }
+}
+
+/* Play indicator, shown while a video is paused (blocked autoplay or user pause). */
+.video-frame::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M8 5v14l11-7z'/%3E%3C/svg%3E") center / 28px no-repeat;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.video-frame.is-paused::after {
+  opacity: 1;
+}
+
+/* Cursor-following magnifier (canvas drawn by index.js). */
+.zoom-lens {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+  background: #000;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  display: none;
+  z-index: 2;
+}
+
+.video-frame.is-zooming .zoom-lens {
+  display: block;
+}
+
+.video-frame.is-zooming {
+  cursor: crosshair;
+}
+
+.speed-badge {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: rgba(35, 197, 94, 0.55);
+  color: #fff;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
+.slider-pagination .slider-page {
+  background: #000000;
+}
+
+.eql-cntrb { 
+  font-size: smaller;
+}
+
+
+

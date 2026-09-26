@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="VGM-VS: Rethinking Visual Geometry Model for High-Precision Visual Servoing. Scene-anchored visual servoing built on a pretrained visual geometry model with scene-specific metric adaptation.">
+  <meta property="og:title" content="VGM-VS: Rethinking Visual Geometry Model for High-Precision Visual Servoing"/>
+  <meta property="og:description" content="Scene-anchored visual servoing built on a pretrained visual geometry model with scene-specific metric adaptation, reaching submillimeter accuracy on real-world assembly tasks."/>
+  <meta property="og:url" content="https://yimin-pan.github.io/vgm-vs-page/"/>
+  <meta property="og:image" content="static/images/teaser.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+  <meta name="twitter:title" content="VGM-VS: Rethinking Visual Geometry Model for High-Precision Visual Servoing">
+  <meta name="twitter:description" content="Scene-anchored visual servoing built on a pretrained visual geometry model with scene-specific metric adaptation.">
+  <meta name="twitter:image" content="static/images/teaser.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="keywords" content="visual servoing, visual geometry model, VGGT, robot assembly, pose estimation, robotics">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>VGM-VS: Rethinking Visual Geometry Model for High-Precision Visual Servoing</title>
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css?v=20260926f">
+
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js?v=20260926f"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <!-- Title -->
+          <h1 class="title is-1 publication-title">VGM-VS</h1>
+          <h2 class="title is-2 publication-title" style="margin-top: 0; margin-bottom: 0">Rethinking Visual Geometry Model for High-Precision Visual Servoing</h2>
+          <div class="is-size-5 publication-authors">
+            <!-- Authors: wrap a name in <a href="..." target="_blank"> to link a personal page -->
+            <span class="author-block">
+              Yimin Pan<sup>1</sup>,
+            </span>
+            <span class="author-block">
+              Sen Wang<sup>1,2</sup>,
+            </span>
+            <span class="author-block">
+              You Zhou<sup>1</sup>,
+            </span>
+            <span class="author-block">
+              Jianfeng Gao<sup>1</sup>,
+            </span>
+            <p></p>
+            <span class="author-block">
+              Pengbo Sun<sup>1</sup>,
+            </span>
+            <span class="author-block">
+              Ahmed M. Naguib<sup>1</sup>,
+            </span>
+            <span class="author-block">
+              Zoltan-Csaba Marton<sup>1</sup>
+            </span>
+          </div>
+
+          <!-- Affiliations -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup><a href="https://www.agile-robots.com/" target="_blank">Agile Robots SE</a>, </span>
+            <span class="author-block"><sup>2</sup><a href="https://www.tum.de/" target="_blank">Technical University of Munich</a></span>
+          </div>
+
+          <div class="column has-text-centered">
+            <!-- PDF link -->
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="static/pdf/vgm-vs.pdf?v=arxiv-v1" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+
+              <!-- ArXiv Link -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2609.28312" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Teaser image -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="static/images/teaser.png" alt="Overview of VGM-VS on the RAM insertion task"/>
+      <div class="content has-text-justified">
+        <p>
+          TL;DR. VGM-VS uses a pretrained visual geometry model to predict the relative pose between the current camera view and a reference image, and applies it iteratively as the pose increment of a closed-loop visual servoing controller. A short, autonomously recorded dataset makes the predictions metric, enabling submillimeter alignment on real-world assembly tasks.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- End teaser image -->
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            We present VGM-VS, a visual servoing method built on a pretrained feed-forward visual geometry model. Given the current view and a reference image captured at the target configuration, we estimate the relative camera pose with a visual geometry model and apply it iteratively as the pose increment of a closed-loop pose-based visual servoing (PBVS) scheme. The geometry-aware representation acquired from large-scale pretraining keeps this estimate reliable when the target is occluded, weakly textured, or covers only a small part of the image. However, the scale ambiguity inherent to these models leaves the predicted translation defined up to an unknown scale, while the pose increment must be metric for robot control. We close this gap with a scene-specific metric adaptation: the robot autonomously records image–pose pairs along a predefined motion starting from the target pose, and we fine-tune the camera head on these data, jointly learning the hand–eye transform and thus removing the need for a dedicated calibration process. We evaluate our method on three real-world assembly tasks with demanding tolerances: USB-C cable picking, cable insertion, and RAM insertion. Running in real time at 30Hz, VGM-VS converges to submillimeter terminal accuracy on the cable tasks, and reaches success rates of 90–100% when the target is moved during servoing. It converges in all trials under initial displacements of up to 30cm from the reference pose and with 50% of the target object occluded, outperforming the compared visual servoing baselines.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+<!-- Method overview -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3 has-text-centered">Method</h2>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <img src="static/images/pipeline.png" alt="Overview of the VGM-VS pipeline"/>
+          <h2 class="content has-text-justified">
+            (a) Data collection: the end-effector follows a conical spiral with its apex at the target pose, yielding synchronized image–pose pairs for the target workspace. (b) Fine-tuning: the VGGT-Ω aggregator is kept frozen, while the camera head and the hand–eye transform are trainable and optimized against the ground-truth relative pose. (c) Pose-based visual servoing loop: the predicted increment is composed with the current robot pose and sent to a Cartesian motion controller. When its translational and rotational magnitudes fall below the thresholds τ<sub>t</sub> and τ<sub>R</sub>, the predefined task motion is executed; otherwise, the loop continues with the new observation.
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End method overview -->
+
+<!-- Demonstrations -->
+<section class="hero is-small" id="demonstrations">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3 has-text-centered">Demonstrations</h2>
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <div class="content has-text-justified">
+            <p>
+              Real-robot runs of VGM-VS on the three assembly tasks under random initial poses, target occlusion, and a moving target. In RAM insertion, the module is first grasped from a fixture with a predefined motion. In all methods, the final insertion or picking is a simple linear motion defined in the TCP frame, executed once the alignment process has converged.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-task">
+        <h3 class="title is-4 has-text-centered">RAM Insertion</h3>
+        <div id="ram-insertion-carousel" class="carousel demo-carousel">
+        <div class="item has-text-centered">
+          <div class="video-frame">
+            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata" data-speed="1×">
+              <source src="./static/videos/ram_insertion/initial_pose.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="demo-caption has-text-centered">Random Initial Pose</p>
+        </div>
+        <div class="item has-text-centered">
+          <div class="video-frame">
+            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata">
+              <source src="./static/videos/ram_insertion/camera_view.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="demo-caption has-text-centered">Example Camera View</p>
+        </div>
+        <div class="item has-text-centered">
+          <div class="video-frame">
+            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata" data-speed="1×">
+              <source src="./static/videos/ram_insertion/occlusion.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="demo-caption has-text-centered">~50% Target Object Occlusion</p>
+        </div>
+        <div class="item has-text-centered">
+          <div class="video-frame">
+            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata" data-speed="1×">
+              <source src="./static/videos/ram_insertion/dynamic.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="demo-caption has-text-centered">Moving Target</p>
+        </div>
+        <div class="item has-text-centered">
+          <div class="video-frame">
+            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata" data-speed="1×">
+              <source src="./static/videos/ram_insertion/dynamic_covering.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="demo-caption has-text-centered">Moving Target + Complete Occlusion</p>
+        </div>
+        </div>
+      </div>
+
+      <div class="demo-task">
+        <h3 class="title is-4 has-text-centered">USB-C Cable Picking</h3>
+        <div id="cable-picking-carousel" class="carousel demo-carousel">
+        <div class="item has-text-centered">
+          <div class="video-frame">
+            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata" data-speed="1×">
+              <source src="./static/videos/cable_picking/initial_pose.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="demo-caption has-text-centered">Random Initial Pose</p>
+        </div>
+        <div class="item has-text-centered">
+          <div class="video-frame">
+            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata">
+              <source src="./static/videos/cable_picking/camera_view.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="demo-caption has-text-centered">Example Camera View</p>
+        </div>
+        <div class="item has-text-centered">
+          <div class="video-frame">
+            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata" data-speed="1×">
+              <source src="./static/videos/cable_picking/occlusion.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="demo-caption has-text-centered">~50% Target Object Occlusion</p>
+        </div>
+        <div class="item has-text-centered">
+          <div class="video-frame">
+            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata" data-speed="1×">
+              <source src="./static/videos/cable_picking/dynamic.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="demo-caption has-text-centered">Moving Target</p>
+        </div>
+        </div>
+      </div>
+
+      <div class="demo-task">
+        <h3 class="title is-4 has-text-centered">USB-C Cable Insertion</h3>
+        <div id="cable-insertion-carousel" class="carousel demo-carousel">
+        <div class="item has-text-centered">
+          <div class="video-frame">
+            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata" data-speed="1×">
+              <source src="./static/videos/cable_insertion/initial_pose.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="demo-caption has-text-centered">Random Initial Pose</p>
+        </div>
+        <div class="item has-text-centered">
+          <div class="video-frame">
+            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata">
+              <source src="./static/videos/cable_insertion/camera_view.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="demo-caption has-text-centered">Example Camera View</p>
+        </div>
+        <div class="item has-text-centered">
+          <div class="video-frame">
+            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata" data-speed="1×">
+              <source src="./static/videos/cable_insertion/occlusion.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="demo-caption has-text-centered">~50% Target Object Occlusion</p>
+        </div>
+        <div class="item has-text-centered">
+          <div class="video-frame">
+            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata" data-speed="1×">
+              <source src="./static/videos/cable_insertion/dynamic.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="demo-caption has-text-centered">Moving Target</p>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End demonstrations -->
+
+<!-- Quantitative results -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
+      <div class="columns is-centered">
+        <div class="column is-full">
+          <div class="table-container">
+            <table class="table is-striped is-narrow is-hoverable is-fullwidth has-text-centered">
+              <thead>
+                <tr>
+                  <th>Task</th>
+                  <th>Eval. type</th>
+                  <th>Setting</th>
+                  <th>Method</th>
+                  <th>Conv. (%) ↑</th>
+                  <th>e<sub>t</sub> (mm) ↓</th>
+                  <th>e<sub>R</sub> (°) ↓</th>
+                  <th>Iter. ↓</th>
+                  <th>Success (%) ↑</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td rowspan="20"><b>RAM insertion</b></td>
+                  <td rowspan="8">Init. pose pert.</td>
+                  <td rowspan="4">Small</td>
+                  <td>ORB-IBVS</td><td><b>100</b></td><td>3.45</td><td>0.8</td><td>777.34</td><td>–</td>
+                </tr>
+                <tr><td>ART-VS</td><td>46</td><td>32.97</td><td>6.47</td><td>140.11</td><td>–</td></tr>
+                <tr><td>VGM-VS w/o FT</td><td><b>100</b></td><td>6.6</td><td>1.04</td><td><b>23</b></td><td>–</td></tr>
+                <tr><td>VGM-VS</td><td><b>100</b></td><td><b>0.95</b></td><td><b>0.45</b></td><td>26.64</td><td>–</td></tr>
+
+                <tr>
+                  <td rowspan="4">Large</td>
+                  <td>ORB-IBVS</td><td>66</td><td>3.69</td><td>0.78</td><td>926.33</td><td>–</td>
+                </tr>
+                <tr><td>ART-VS</td><td>27</td><td>65.34</td><td>15.11</td><td>110.35</td><td>–</td></tr>
+                <tr><td>VGM-VS w/o FT</td><td>96</td><td>6.95</td><td>1.11</td><td>29.75</td><td>–</td></tr>
+                <tr><td>VGM-VS</td><td><b>100</b></td><td><b>1.15</b></td><td><b>0.55</b></td><td><b>26.79</b></td><td>–</td></tr>
+
+                <tr>
+                  <td rowspan="12">Scene dist.</td>
+                  <td rowspan="4">25% occ.</td>
+                  <td>ORB-IBVS</td><td>40</td><td>5.43</td><td>1.15</td><td>1101</td><td>–</td>
+                </tr>
+                <tr><td>ART-VS</td><td>65</td><td>30.12</td><td>6.20</td><td>79</td><td>–</td></tr>
+                <tr><td>VGM-VS w/o FT</td><td><b>100</b></td><td>5.55</td><td>1.25</td><td>21</td><td>–</td></tr>
+                <tr><td>VGM-VS</td><td><b>100</b></td><td><b>3.37</b></td><td><b>0.87</b></td><td><b>17.65</b></td><td>–</td></tr>
+
+                <tr>
+                  <td rowspan="4">50% occ.</td>
+                  <td>ORB-IBVS</td><td>15</td><td>7.32</td><td>1.66</td><td>1297</td><td>–</td>
+                </tr>
+                <tr><td>ART-VS</td><td>55</td><td>29.82</td><td>5.84</td><td>41.18</td><td>–</td></tr>
+                <tr><td>VGM-VS w/o FT</td><td>85</td><td>14.8</td><td>2.85</td><td>43.29</td><td>–</td></tr>
+                <tr><td>VGM-VS</td><td><b>100</b></td><td><b>4.21</b></td><td><b>1.07</b></td><td><b>19.4</b></td><td>–</td></tr>
+
+                <tr>
+                  <td rowspan="4">Dynamic</td>
+                  <td>ORB-IBVS</td><td>55</td><td>–</td><td>–</td><td>1951</td><td>30</td>
+                </tr>
+                <tr><td>ART-VS</td><td>20</td><td>–</td><td>–</td><td>39.5</td><td>10</td></tr>
+                <tr><td>VGM-VS w/o FT</td><td>90</td><td>–</td><td>–</td><td>27</td><td>60</td></tr>
+                <tr><td>VGM-VS</td><td><b>100</b></td><td>–</td><td>–</td><td><b>20.2</b></td><td><b>95</b></td></tr>
+
+                <tr>
+                  <td rowspan="4"><b>Cable picking</b></td>
+                  <td rowspan="2">Init. pose pert.</td>
+                  <td rowspan="2">Large</td>
+                  <td>VGM-VS w/o FT</td><td><b>100</b></td><td>4.61</td><td>0.32</td><td>36</td><td>–</td>
+                </tr>
+                <tr><td>VGM-VS</td><td><b>100</b></td><td><b>0.58</b></td><td><b>0.20</b></td><td><b>26.56</b></td><td>–</td></tr>
+                <tr>
+                  <td rowspan="2">Scene dist.</td>
+                  <td rowspan="2">Dynamic</td>
+                  <td>VGM-VS w/o FT</td><td>90</td><td>–</td><td>–</td><td>17.38</td><td>10</td>
+                </tr>
+                <tr><td>VGM-VS</td><td><b>100</b></td><td>–</td><td>–</td><td><b>12.29</b></td><td><b>100</b></td></tr>
+
+                <tr>
+                  <td rowspan="4"><b>Cable insertion</b></td>
+                  <td rowspan="2">Init. pose pert.</td>
+                  <td rowspan="2">Large</td>
+                  <td>VGM-VS w/o FT</td><td><b>100</b></td><td>1.98</td><td>0.33</td><td><b>26.62</b></td><td>–</td>
+                </tr>
+                <tr><td>VGM-VS</td><td><b>100</b></td><td><b>0.67</b></td><td><b>0.08</b></td><td>33.06</td><td>–</td></tr>
+                <tr>
+                  <td rowspan="2">Scene dist.</td>
+                  <td rowspan="2">Dynamic</td>
+                  <td>VGM-VS w/o FT</td><td>95</td><td>–</td><td>–</td><td><b>11.6</b></td><td>0</td>
+                </tr>
+                <tr><td>VGM-VS</td><td><b>100</b></td><td>–</td><td>–</td><td>15</td><td><b>90</b></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h2 class="subtitle has-text-centered">
+            Quantitative comparison on three real-world tasks. ↑/↓ indicate that higher/lower is better; the best result within each setting is shown in <b>bold</b>, and a dash denotes a metric that is not measured.
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End quantitative results -->
+
+<!-- Servoing plots -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3 has-text-centered">Servoing Behaviour on RAM Insertion</h2>
+
+      <div class="columns is-centered">
+        <div class="column is-one-third">
+          <img src="static/images/plot_vgm-vs_translation_delta.png" alt="Predicted translation increment"/>
+          <h2 class="subtitle has-text-centered">(a) Predicted translation increment Δt (mm)</h2>
+        </div>
+        <div class="column is-one-third">
+          <img src="static/images/plot_vgm-vs_rotation_delta.png" alt="Predicted rotation increment"/>
+          <h2 class="subtitle has-text-centered">(b) Predicted rotation increment Δr (deg)</h2>
+        </div>
+        <div class="column is-one-third">
+          <img src="static/images/plot_translation_error.png" alt="Translation error"/>
+          <h2 class="subtitle has-text-centered">(c) Translation error e<sub>t</sub> (mm)</h2>
+        </div>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column is-one-third">
+          <img src="static/images/plot_ibvs-translation_velocity.png" alt="Camera linear velocity"/>
+          <h2 class="subtitle has-text-centered">(d) Camera linear velocity v (m/s)</h2>
+        </div>
+        <div class="column is-one-third">
+          <img src="static/images/plot_ibvs-rotation_velocity.png" alt="Camera angular velocity"/>
+          <h2 class="subtitle has-text-centered">(e) Camera angular velocity ω (rad/s)</h2>
+        </div>
+        <div class="column is-one-third">
+          <img src="static/images/plot_rotation_error.png" alt="Rotation error"/>
+          <h2 class="subtitle has-text-centered">(f) Rotation error e<sub>R</sub> (deg)</h2>
+        </div>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <div class="content has-text-justified">
+            <p>
+              RAM insertion under large initial pose perturbation. The x axis represents the number of inference steps (%). VGM-VS variants are shown in (a), (b); the keypoint-based baselines in (d), (e); all four methods in (c), (f). The increments of the fine-tuned model decay monotonically to zero, whereas VGM-VS w/o FT overshoots and changes sign before settling, and the velocities of the keypoint-based baselines keep fluctuating along the trajectory.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End servoing plots -->
+
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@misc{pan2026vgmvs,
+  title={VGM-VS: Rethinking Visual Geometry Model for High-Precision Visual Servoing},
+  author={Yimin Pan and Sen Wang and You Zhou and Jianfeng Gao and Pengbo Sun and Ahmed M. Naguib and Zoltan-Csaba Marton},
+  year={2026},
+  eprint={2609.28312},
+  archivePrefix={arXiv},
+  primaryClass={cs.RO},
+  url={https://arxiv.org/abs/2609.28312},
+}</code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  </body>
+  </html>
